@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlexxBox</title>
+    <style>
+      * {
+        height: 100vh;
+        width: 100vw;
+        box-sizing: border-box;
+      }
+      .wrapper {
+        border: 2px solid black;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+      }
+      .item {
+        border: 1px solid blue;
+        background: aquamarine;
+        height: 80px;
+        
+        margin: 10px;
+        display: flex;
+        flex-basis: 100px; /*width*/
+    }
+      .card6 {
+        flex-grow: 1;/*defualt 0*/
+        flex-shrink: 0; /*defualt 1*/
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="item">card1</div>
+      <div class="item">card2</div>
+      <div class="item">card3</div>
+      <div class="item">card4</div>
+      <div class="item">card5</div>
+      <div class="item card6">card6</div>
+      
+    </div>
+  </body>
+</html>

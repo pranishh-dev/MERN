@@ -1,0 +1,30 @@
+.box{
+    width: 200px;
+    height: 200px;
+    background-color: bisque;
+    animation:game 10s ease 0s infinite ; 
+    box-sizing: border-box;
+}
+@keyframes game{
+    0%{
+        transform: translate(0px,0px);
+    }
+    25%{
+        transform: translate(80vw,0px);
+        border-radius: 50%;
+
+    }
+    50%{
+        transform: translate(80vw,60vh);
+
+
+    }
+    75%{
+        transform: translate(0px,60vh);
+
+    }
+    100%{
+        transform: translate(0px,0px);
+
+    }
+}

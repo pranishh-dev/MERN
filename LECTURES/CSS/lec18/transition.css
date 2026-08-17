@@ -1,0 +1,42 @@
+.items{
+    background: wheat;
+    width: 100px;
+    height: 100px;
+    /* transition-duration: 2s ;
+    transition-property: width; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    /* transition-delay: 2s; */
+    transition: width 2s ease 2s; 
+    /* PROPERTY DURATION FUNC DELAY */
+}
+.container:hover div{
+    width: 1000px;
+}
+.ease{
+    background-color: aqua;
+    transition-timing-function: ease;
+}
+.ease-in{
+    background-color: blueviolet;
+    transition-timing-function: ease-in;
+}
+.ease-in-out{
+    background-color: burlywood;
+    transition-timing-function: ease-in-out;
+}
+.ease-out{
+    background: rgb(112, 76, 76);
+    transition-timing-function: ease-out;
+}
+.linear{
+    background: #3bba39;
+    transition-timing-function: linear;
+}
+.custom{
+    background: red;
+    transition-timing-function: cubic-bezier(0.57, 1.6, 0.76,-0.06);
+}
+

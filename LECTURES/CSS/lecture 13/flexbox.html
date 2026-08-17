@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FlexxBox</title>
+    <style>
+      * {
+        height: 100vh;
+        width: 100vw;
+        box-sizing: border-box;
+      }
+      .wrapper {
+        border: 2px solid black;
+        height: 100vh;
+        width: 100vw;
+        display: flex;
+        /* /* flex-direction: row; */
+        flex-direction: row-reverse;
+        /* flex-direction: column; */
+        /* flex-direction: column-reverse; */
+        justify-content: center;
+        /* align-items: center; */
+
+        flex-wrap: wrap;
+        /* align-content: space-evenly ; */
+      }
+      .item {
+        border: 1px solid blue;
+        background: aquamarine;
+        height: 80px;
+        width: 80px;
+        margin: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* text-align: center; works as align items center if not flex */
+      }
+      .card6 {
+        /* display: flex; */
+        align-self: flex-end;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="item">card1</div>
+      <div class="item">card2</div>
+      <div class="item">card3</div>
+      <div class="item">card4</div>
+      <div class="item">card5</div>
+      <div class="item">card6</div>
+      <div class="item">card1</div>
+      <div class="item">card2</div>
+      <div class="item">card3</div>
+      <div class="item">card4</div>
+      <div class="item">card5</div>
+      <div class="item card6">card6</div>
+      <div class="item">card1</div>
+      <div class="item">card2</div>
+      <div class="item">card3</div>
+      <div class="item">card4</div>
+      <div class="item">card5</div>
+      <div class="item">card6</div>
+      <div class="item">card1</div>
+      <div class="item">card2</div>
+      <div class="item">card3</div>
+      <div class="item">card4</div>
+      <div class="item">card5</div>
+      <div class="item">card6</div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.item{
+    width: 100px;
+    /* height: 20px; */
+    background: white;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 5px ;
+    transition:  0.6s;
+    
+}
+
+.item:hover{
+    /* transform: skew(20deg); */
+    transform: translate(0,-5px)scale(1.1) rotate(3deg)  ;
+    box-shadow: 0px 2px 50px black;
+}
