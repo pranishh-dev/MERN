@@ -13,3 +13,14 @@ let details = {
 }
 details.role = "developer"
 console.log(details);
+
+// Create a profile object containing name and email. Add a new property named isLoggedIn with the value true.
+
+let id ={
+ name: "Rahul",
+ email: "rahul@example.com"
+}
+
+id.isLoggedIn = true;
+console.log(id);
+
