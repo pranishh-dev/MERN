@@ -18,18 +18,6 @@ let { name: productName } = product
 console.log(productName);
 
 
-// Create a function named displayUser that receives a user object. Use object destructuring in the function
-// parameters to access and display name and email.
-
-function displayUser({ name, email }) {
-    console.log(name, email);
-
-}
-displayUser({
-    name: "Rahul",
-    email: "rahul@example.com"
-});
-
 // Create variables named name, email, and role. Use shorthand property syntax to create a user object
 // using these variables.
 {
@@ -42,3 +30,15 @@ displayUser({
     console.log(user);
 
 }
+
+// Create a function named displayUser that receives a user object. Use object destructuring in the function
+// parameters to access and display name and email.
+
+function displayUser({ name, email }) {
+    console.log(name, email);
+
+}
+displayUser({
+    name: "Rahul",
+    email: "rahul@example.com"
+});
