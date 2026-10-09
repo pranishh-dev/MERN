@@ -6,4 +6,10 @@ console.log(greet.trimEnd());
 
 console.log(greet.split(" ")); //returns array 
 
-console.log(greet.slice(0,5));
+
+//Slice
+let word = "JAVASCRIPT";
+
+console.log(word.slice(0, 4));  // "JAVA"
+console.log(word.slice(4));    // "SCRIPT"
+console.log(word.slice(-6));   // "SCRIPT"
