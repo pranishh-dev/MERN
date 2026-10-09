@@ -1,2 +1,8 @@
-let add = (num1, num2)=> num1 + num2;
-console.log(add(2,4))
+let add  = (a, b) => {
+    return a + b;
+}
+let subtract = (a, b) => {
+    return a - b;
+}   
+let result = subtract(5, 3);
+console.log(result);
