@@ -65,8 +65,3 @@ let ladile = [
     console.log(boosted);
 
 }
-{
-    
-    let boosted = ladile.map((ladili) => [...ladile, ladili.roll += 100])
-    console.log(boosted);
-}

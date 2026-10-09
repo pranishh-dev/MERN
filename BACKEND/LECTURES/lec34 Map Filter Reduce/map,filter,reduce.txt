@@ -1,0 +1,254 @@
+MAP(), FILTER(), REDUCE()
+=========================
+
+1. map()
+--------
+
+MEANING:
+map() is used to transform/change every element of an array.
+
+USE CASE:
+- Change every element
+- Perform an operation on every element
+- Extract/transform values from an array
+- Create a new array from an existing array
+
+SYNTAX:
+
+array.map(function(element) {
+    return newValue;
+});
+
+OR:
+
+array.map((element) => newValue);
+
+IMPORTANT:
+- map() returns a NEW array.
+- map() runs on EVERY element.
+- Usually the output array has the SAME number of elements.
+
+
+--------------------------------------------------
+
+2. filter()
+------------
+
+MEANING:
+filter() is used to select/keep elements that satisfy a condition.
+
+USE CASE:
+- Find elements matching a condition
+- Remove unwanted elements
+- Get even/odd numbers
+- Filter users/products/data
+- Select elements based on a condition
+
+SYNTAX:
+
+array.filter(function(element) {
+    return condition;
+});
+
+OR:
+
+array.filter(element => condition);
+
+
+IMPORTANT:
+The callback must return true or false.
+
+true  → element is kept
+false → element is removed
+
+IMPORTANT:
+- filter() returns a NEW array.
+- It can return fewer elements than the original.
+- It can also return an empty array [].
+- It does NOT change the original array.
+
+
+--------------------------------------------------
+
+3. reduce()
+------------
+
+MEANING:
+reduce() is used to combine all elements of an array into ONE final value.
+
+USE CASE:
+- Calculate sum
+- Calculate product
+- Find total
+- Count things
+- Build an object
+- Combine array values
+- Calculate averages
+- Find maximum/minimum
+- Convert an array into another data structure
+
+SYNTAX:
+
+array.reduce(function(accumulator, element) {
+    return updatedAccumulator;
+}, initialValue);
+
+OR:
+
+array.reduce((accumulator, element) => updatedAccumulator, initialValue);
+
+
+IMPORTANT TERMS:
+
+accumulator = stores the result so far
+element     = current array element
+initialValue = starting value
+
+
+IMPORTANT:
+- reduce() usually returns ONE value.
+- The result can be a number, string, object, array, etc.
+- The accumulator carries the result from one iteration to the next.
+
+
+==================================================
+MAIN DIFFERENCE
+==================================================
+
+map()
+→ Transform EVERY element
+→ Returns a NEW ARRAY
+→ Same number of elements
+
+filter()
+→ SELECT elements
+→ Returns a NEW ARRAY
+→ Same or fewer elements
+
+reduce()
+→ COMBINE elements
+→ Returns ONE FINAL RESULT
+→ Can be any data type
+
+
+MEMORY TRICK:
+
+MAP    = MODIFY
+FILTER = SELECT
+REDUCE = COMBINE
+
+
+EXAMPLE:
+
+let nums = [1, 2, 3, 4, 5];
+
+
+MAP:
+
+nums.map(num => num * 2);
+
+[2, 4, 6, 8, 10]
+
+
+FILTER:
+
+nums.filter(num => num > 3);
+
+[4, 5]
+
+
+REDUCE:
+
+nums.reduce((sum, num) => sum + num, 0);
+
+15
+
+
+==================================================
+CHAINING
+==================================================
+
+You can use them together.
+
+Example:
+
+let nums = [1, 2, 3, 4, 5, 6];
+
+let result = nums
+    .filter(num => num % 2 === 0)
+    .map(num => num * 2)
+    .reduce((sum, num) => sum + num, 0);
+
+console.log(result);
+// 24
+
+
+STEP 1 — filter():
+
+[1, 2, 3, 4, 5, 6]
+        ↓
+[2, 4, 6]
+
+
+STEP 2 — map():
+
+[2, 4, 6]
+    ↓
+[4, 8, 12]
+
+
+STEP 3 — reduce():
+
+4 + 8 + 12
+    ↓
+24
+
+
+==================================================
+QUICK REVISION
+==================================================
+
+map()
+→ "I want to change every item."
+
+filter()
+→ "I only want some items."
+
+reduce()
+→ "I want to turn everything into one result."
+
+
+map    → ARRAY → ARRAY
+filter → ARRAY → ARRAY
+reduce → ARRAY → VALUE
+
+
+All three take a CALLBACK FUNCTION.
+
+Example:
+
+nums.map(num => num * 2);
+
+           ↑
+      callback function
+
+
+nums.filter(num => num > 5);
+
+              ↑
+         callback function
+
+
+nums.reduce((sum, num) => sum + num, 0);
+
+              ↑
+         callback function
+
+
+
+--Short revision table:
+Method     Purpose                       Callback Return Value        Output Array Length
+-------    ---------------------------   --------------------------   ---------------------
+map()      Transforms each element       The new transformed value    Same length as original
+filter()   Filters out unwanted elements true to keep, false discard  Usually shorter than original
+reduce()   Condenses array to one value  The updated accumulator      Single value (any data type)

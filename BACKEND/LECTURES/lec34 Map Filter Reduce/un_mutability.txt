@@ -1,0 +1,69 @@
+JS — MUTABILITY (Objects, Arrays & Methods)
+============================================
+
+MUTABLE
+→ Original value can be changed.
+
+IMMUTABLE
+→ Original value cannot be changed; a new value is created.
+
+
+OBJECTS
+-------
+Objects are MUTABLE.
+
+let user = { name: "Rahul", age: 20 };
+user.age = 21;              // modifies original
+delete user.age;            // modifies original
+
+Spread creates a new (shallow) object:
+let copy = { ...user };
+
+
+ARRAYS
+------
+Arrays are MUTABLE.
+
+let nums = [1, 2, 3];
+nums[0] = 10;               // modifies original
+
+
+MUTATING ARRAY METHODS
+----------------------
+Change the original array:
+
+push()       → add to end
+pop()        → remove from end
+shift()      → remove from start
+unshift()    → add to start
+splice()     → add/remove/replace
+sort()       → sort original
+reverse()    → reverse original
+
+
+NON-MUTATING METHODS
+--------------------
+Do NOT change the original:
+
+slice()      → returns portion
+map()        → returns new transformed array
+filter()     → returns new filtered array
+concat()     → returns combined array
+find()       → returns first matching element
+includes()   → returns true/false
+indexOf()    → returns index
+
+
+IMPORTANT
+---------
+splice() → MUTATES
+slice()  → DOES NOT MUTATE
+
+delete arr[index]
+→ leaves an empty slot; length stays the same.
+Use splice() to properly remove an array element.
+
+const ≠ immutable
+→ const prevents reassignment, not object/array mutation.
+
+Spread (...) → shallow copy.

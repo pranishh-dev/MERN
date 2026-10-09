@@ -7,3 +7,6 @@ for(key in lang){
 for (value of lang){
     console.log(value);
 }
+
+//for in gives key
+//for of gives value
