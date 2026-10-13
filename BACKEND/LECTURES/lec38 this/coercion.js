@@ -28,6 +28,9 @@ console.log(Number.isNaN(res));
 console.log(Number("1234h")); //needs evth num in input
 console.log(parseInt("1234h")); //takes num only so can include char in input
 
-console.log(Number("1234.456"));
-console.log(parseInt("1234.456"));
+console.log(Number("1234.456")); //takes evth as long as int
+console.log(parseInt("1234.456")); //take only integer
+
+
+
 

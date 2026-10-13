@@ -14,7 +14,7 @@ document.getElementsByClassName("item"); // live HTMLCollection
 document.getElementsByTagName("p");      // live HTMLCollection
 
 document.querySelector(".item");         // first matching CSS selector
-document.querySelectorAll(".item");      // static NodeList of all matches
+document.querySelectorAll(".item");      // static NodeList of all matches not array
 ```
 
 - CSS selector examples: `"#title"` (id), `".item"` (class), `"p"` (tag).
@@ -34,9 +34,10 @@ el.textContent = "Hello";      // text content, including hidden text
 el.innerHTML = "<b>Hello</b>"; // parses HTML markup
 ```
 
-- `innerHTML` reads/writes HTML markup; do not insert untrusted user input into it.
-- Use `textContent` when you want to insert plain text safely.
+- `innerHTML` reads/writes HTML markup; do not insert untrusted user input into it. it parses evth js html css
+- Use `textContent` when you want to insert plain text safely. //used mostly
 - `innerText` reflects rendered/visible text and can depend on styling.
+- `innerText` { if `display : none `, it doesnt show but it is shown when `innerHTML` and` textContent` is used} its not used generally
 
 ## 4. Attributes
 

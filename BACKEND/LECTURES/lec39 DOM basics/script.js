@@ -28,7 +28,7 @@ console.log(document.querySelector("p"));
 
 // MODIFICATION
 console.log(bharosa.innerHTML);
-// bharosa.innerHTML = "<b>meri shyama ju</b>" // very risky
+// bharosa.innerHTML = "<b>meri shyama ju</b>" // very risky - can parse js and html css tag too
 
 // bharosa.innerText = "<b>meri shyama ju</b>"
-bharosa.textContent = "<b>meri shyama ju</b>"
+// bharosa.textContent = "<b>meri shyama ju</b>"

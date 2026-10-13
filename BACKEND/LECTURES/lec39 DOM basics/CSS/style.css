@@ -1,0 +1,13 @@
+.random {
+    text-transform: uppercase;
+    color: red;
+    background: yellow;
+}
+.main-heading {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333333;        /* Changes text color */
+  text-align: center;    /* Centers the heading */
+  margin-bottom: 20px;   /* Adds space below the heading */
+}
