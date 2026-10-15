@@ -1,2 +1,1 @@
-git add .; git commit -m "LEC40 DOM EVENTS COMPLETE"; git push
-
+git add .; git commit -m ""; git push
