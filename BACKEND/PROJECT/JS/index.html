@@ -8,12 +8,28 @@
     <link rel="stylesheet" href="output.css">
 </head>
 
-<body>
-    <h1 class="text-3xl font-bold underline bg-amber-50">
-        Hello world!
-    </h1>
+<body class="pt-4">
+    <div class="wrapper border border-black flex flex-col justify-center mx-auto w-120 rounded-lg">
 
+        <div id="titleDiv" class="bg-blue-500 h-12 flex flex-col justify-center rounded-t-lg">
+            <h2 class="todoTitle text-white pl-4 text-lg">Todo App</h2>
+        </div>
 
+        <div id="formDiv" class="p-8">
+            <form action="" class="todo-form flex gap-4 ">
+                <input type="text" name="todo" id="todo" placeholder="Enter your task.."
+                    class="border border-gray-300 rounded-lg px-4 py-2 flex-1">
+                <button type="submit" class="bg-blue-500  px-4 py-2 rounded-sm">Add</button>
+            </form>
+        </div>
+
+        <div id="listDiv" class="pt-0 px-8 pb-8">
+            <ul id="todos">
+            </ul>
+        </div>
+
+    </div>
+    </div>
     <script src="script.js"> </script>
 </body>
 
