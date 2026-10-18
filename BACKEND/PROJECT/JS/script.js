@@ -18,6 +18,8 @@ let todoForm = document.querySelector(".todo-form")
 let todoInput = document.querySelector("#todo")
 let todoCount = document.querySelector("#taskCount")
 let todoCompleteCount = document.querySelector("#completeCount")
+let cancelBtn = document.querySelector("#cancel-update")
+let cancelBtnDiv = document.querySelector("#cancel-update-div")
 
 function updateCounts() {
     todoCount.textContent = `TASKS(${todos.length})`
@@ -50,7 +52,6 @@ function todoAppend(todo) {
         label.classList?.remove("line-through")
         label.classList?.remove("text-gray-400")
     }
-    updateCounts()
 }
 
 function completeCheck() {
@@ -59,6 +60,16 @@ function completeCheck() {
         if (todo.isCompleted == true) count++
     })
     return count
+}
+
+function resetFieldAll() {
+    editToDo = null
+    todoInput.value = ""
+    formBtn.textContent = "Add"
+
+    cancelBtnDiv.classList.add("hidden")
+    cancelBtnDiv.classList.remove("flex")
+
 }
 
 function renderToDo() {
@@ -70,6 +81,10 @@ function renderToDo() {
 }
 
 function startEditToDo(id) {
+    cancelBtnDiv.classList.remove("hidden")
+    // console.log(cancelBtnDiv);
+    cancelBtnDiv.classList.add("flex")
+
 
     formBtn.textContent = "Update"
     editToDo = id
@@ -85,12 +100,13 @@ function deleteToDofn(id) {
 
 let editToDo = null
 
-
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
-    if (editToDo) {
-        let todoValue = todoInput.value
+    if (editToDo !== null) {
+
+        let todoValue = todoInput.value.trim()
+        if (!todoValue) return
         todos = todos.map((todo) => {
             if (todo.id == editToDo) {
                 return ({
@@ -113,10 +129,9 @@ todoForm.addEventListener("submit", (e) => {
         //gud for small lists
         renderToDo()
 
+
         //reset
-        editToDo = null
-        todoInput.value = ""
-        formBtn.textContent = "Add"
+        resetFieldAll()
 
     }
     else {
@@ -130,13 +145,12 @@ todoForm.addEventListener("submit", (e) => {
         todos.push(todoValue)
         todoAppend(todoValue)
         todoInput.value = ""
+        updateCounts()
     }
 
 })
 
 renderToDo()
-
-
 
 todoList.addEventListener("click", (e) => {
     // e.preventDefault()
@@ -152,8 +166,9 @@ todoList.addEventListener("click", (e) => {
     }
 
     if (action == "delete") {
-        targetLi.remove()
         deleteToDofn(id)
+        if (editToDo == id) resetFieldAll() //if editing task gets deleted it resets the field
+        targetLi.remove()
     }
 
     updateCounts()
@@ -162,9 +177,10 @@ todoList.addEventListener("click", (e) => {
 todoList.addEventListener("change", (e) => {
     // e.preventDefault()
     if (e.target.dataset.action != "checkbox") return
-
     const targetLi = e.target.closest("li")
+    if (!targetLi) return
 
+    let isComplete = e.target.checked
 
     todos = todos.map((todo) => (todo.id === Number(targetLi.id))
         ? {
@@ -187,4 +203,7 @@ todoList.addEventListener("change", (e) => {
 
     // label.classList.toggle("text-white")
     updateCounts()
+})
+cancelBtn.addEventListener("click", (e) => {
+    resetFieldAll()
 })
