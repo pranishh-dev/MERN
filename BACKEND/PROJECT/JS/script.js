@@ -37,6 +37,15 @@ function todoAppend(todo) {
                     </div>
                         `
     todoList.append(todoValue)
+    let label = todoValue.querySelector("label");
+    if (todo.isCompleted) {
+        label.classList.add("line-through")
+        label.classList.add("text-gray-400")
+    }
+    else {
+        label.classList?.remove("line-through")
+        label.classList?.remove("text-gray-400")
+    }
     updateCounts()
 }
 function completeCheck() {
