@@ -29,7 +29,7 @@ function todoAppend(todo) {
     todoValue.className = "flex justify-between border border-gray-300 p-3 rounded-lg align-middle "
     todoValue.innerHTML = `
                     <input data-action="checkbox" type="checkbox" name="todoCheck" id="todoCheck-${todo.id}" class="w-4 h-4 my-auto" ${todo.isCompleted ? "checked" : ""}>
-                    <label for="todoCheck-${todo.id}" class="flex-1 ml-4 my-auto ">${todo.text}</label>
+                    <label for="todoCheck-${todo.id}" class="flex-1 ml-4 my-auto ${(todo.isCompleted) ? "line-through" : ""}">${todo.text}</label>
                    
                     <div class="btns flex gap-4">
                     <button data-action="edit" class="bg-green-100 px-4 py-1 rounded-sm">Edit</button>
@@ -87,17 +87,31 @@ todoList.addEventListener("click", (e) => {
 
 todoList.addEventListener("change", (e) => {
     // e.preventDefault()
+    if (e.target.dataset.action != "checkbox") return
     const targetLi = e.target.closest("li")
     if (!targetLi) return
 
-    if (e.target.dataset.action == "checkbox") {
-        todos = todos.map((todo) => (todo.id === Number(targetLi.id))
-            ? {
-                ...todo,
-                isCompleted: e.target.checked
-            }
-            : todo)
+    let isCompleted = e.target.checked
+
+    todos = todos.map((todo) => (todo.id === Number(targetLi.id))
+        ? {
+            ...todo,
+            isCompleted: isCompleted
+        }
+        : todo);
+
+    const label = targetLi.querySelector("label")
+    if (isCompleted) {
+        label.classList.add("line-through")
+        label.classList.add("text-gray-400")
     }
+    else {
+        label.classList?.remove("line-through")
+        label.classList?.remove("text-gray-400")
+    }
+
+
+    // label.classList.toggle("text-white")
     updateCounts()
 })
 
