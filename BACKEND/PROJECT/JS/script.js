@@ -1,4 +1,3 @@
-// const todos = ["run", "naam","run to gym"]
 let todos = [{
     id: Date.now() + 1,
     text: "run",
@@ -12,9 +11,11 @@ let todos = [{
     text: "naam",
     isCompleted: false
 }]
-const todoList = document.querySelector("#todos")
-const todoForm = document.querySelector(".todo-form")
-const todoInput = document.querySelector("#todo")
+
+let formBtn = document.querySelector('button[type="submit"]')
+let todoList = document.querySelector("#todos")
+let todoForm = document.querySelector(".todo-form")
+let todoInput = document.querySelector("#todo")
 let todoCount = document.querySelector("#taskCount")
 let todoCompleteCount = document.querySelector("#completeCount")
 
@@ -22,7 +23,9 @@ function updateCounts() {
     todoCount.textContent = `TASKS(${todos.length})`
     todoCompleteCount.textContent = `COMPLETED: ${completeCheck()}`
 }
+
 function todoAppend(todo) {
+
     // console.log(todo);
     let todoValue = document.createElement("li")
     todoValue.id = todo.id
@@ -37,6 +40,7 @@ function todoAppend(todo) {
                     </div>
                         `
     todoList.append(todoValue)
+
     let label = todoValue.querySelector("label");
     if (todo.isCompleted) {
         label.classList.add("line-through")
@@ -48,6 +52,7 @@ function todoAppend(todo) {
     }
     updateCounts()
 }
+
 function completeCheck() {
     let count = 0;
     todos.forEach((todo) => {
@@ -55,62 +60,122 @@ function completeCheck() {
     })
     return count
 }
+
 function renderToDo() {
+    todoList.innerHTML = ""
     todos.forEach((todo) => {
         todoAppend(todo)
     })
     updateCounts()
 }
 
-renderToDo()
+function startEditToDo(id) {
+
+    formBtn.textContent = "Update"
+    editToDo = id
+    todoToEdit = todos.find((todo) => todo.id == editToDo)
+    todoInput.value = todoToEdit.text
+}
+
+function deleteToDofn(id) {
+    todos = todos.filter((todo) => (todo.id !== Number(id)))
+    // btn.textContent = "Add"
+
+}
+
+let editToDo = null
+
 
 todoForm.addEventListener("submit", (e) => {
     e.preventDefault()
 
-    let todoValue = {
-        id: Date.now(),
-        text: todoInput.value.trim(),
-        isCompleted: false
-    }
-    if (!todoValue.text) return
+    if (editToDo) {
+        let todoValue = todoInput.value
+        todos = todos.map((todo) => {
+            if (todo.id == editToDo) {
+                return ({
+                    ...todo,
+                    text: todoValue
+                })
+            }
+            return todo
+        })
 
-    todos.push(todoValue)
-    todoAppend(todoValue)
-    todoInput.value = ""
+
+        //perfect for larger list
+        // let targetLi = document.getElementById(editToDo)
+        // let label = targetLi.querySelector("label")
+        // label.textContent = todoValue;
+
+        // console.log(todoValue);
+        // console.log(label);
+
+        //gud for small lists
+        renderToDo()
+
+        //reset
+        editToDo = null
+        todoInput.value = ""
+        formBtn.textContent = "Add"
+
+    }
+    else {
+        let todoValue = {
+            id: Date.now(),
+            text: todoInput.value.trim(),
+            isCompleted: false
+        }
+        if (!todoValue.text) return
+
+        todos.push(todoValue)
+        todoAppend(todoValue)
+        todoInput.value = ""
+    }
 
 })
+
+renderToDo()
+
+
 
 todoList.addEventListener("click", (e) => {
     // e.preventDefault()
     const targetLi = e.target.closest("li")
     if (!targetLi) return
 
-    if (e.target.dataset.action == "delete") {
+    let id = targetLi.id
+    let action = e.target.dataset.action
+
+    if (action === "edit") {
+        // todoInput.value = task.textContent
+        startEditToDo(id)
+    }
+
+    if (action == "delete") {
         targetLi.remove()
-        todos = todos.filter((todo) => (todo.id !== Number(targetLi.id)))
+        deleteToDofn(id)
     }
 
     updateCounts()
 })
 
-
 todoList.addEventListener("change", (e) => {
     // e.preventDefault()
     if (e.target.dataset.action != "checkbox") return
-    const targetLi = e.target.closest("li")
-    if (!targetLi) return
 
-    let isCompleted = e.target.checked
+    const targetLi = e.target.closest("li")
+
 
     todos = todos.map((todo) => (todo.id === Number(targetLi.id))
         ? {
             ...todo,
-            isCompleted: isCompleted
+            isCompleted: isComplete
         }
         : todo);
 
     const label = targetLi.querySelector("label")
-    if (isCompleted) {
+
+    if (isComplete) {
         label.classList.add("line-through")
         label.classList.add("text-gray-400")
     }
@@ -123,5 +188,3 @@ todoList.addEventListener("change", (e) => {
     // label.classList.toggle("text-white")
     updateCounts()
 })
-
-
