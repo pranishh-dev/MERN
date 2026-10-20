@@ -1,0 +1,56 @@
+function searchPizza() {
+    return new Promise((resolve, reject) => {
+        console.log("searching for Pizza");
+        setTimeout((price) => {
+            console.log("Pizza Found");
+            price = 500
+            resolve(price)
+        }, 2000);
+    });
+
+}
+function addToCart() {
+    return new Promise((resolve, reject) => {
+        console.log("Adding in Cart....");
+        setTimeout(() => {
+            console.log("Added to Cart.");
+            resolve()
+        }, 2000);
+    });
+}
+
+function payment(amt) {
+    return new Promise((resolve, reject) => {
+        console.log(`Payment on Process, Amount: ${amt}`);
+        setTimeout(() => {
+            let isSucessful = true
+            if (isSucessful) {
+                console.log(`Payment Succcesful, Paid: ${amt}`);
+                console.log("pizza bas aaraha he bhai");
+                resolve()
+            } else {
+                reject("Pizza nahi arra ha he bhai")
+            }
+        }, 5000);
+    });
+
+}
+
+// let res = searchPizza()
+
+// res.then((price) => addToCart(price))
+//     .then(price => payment(price))
+//     .then(() => console.log("Bas aaraha he"))
+//     .catch((err) => console.log(err))
+
+async function orderFood() {
+    try {
+        let price = await searchPizza()
+        await addToCart()
+        await payment(price)
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+orderFood()
