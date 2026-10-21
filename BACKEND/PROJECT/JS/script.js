@@ -1,4 +1,4 @@
-let todos = [{
+let todos = JSON.parse(localStorage.getItem("todos")) || [{
     id: Date.now() + 1,
     text: "run",
     isCompleted: false
@@ -21,6 +21,9 @@ let todoCompleteCount = document.querySelector("#completeCount")
 let cancelBtn = document.querySelector("#cancel-update")
 let cancelBtnDiv = document.querySelector("#cancel-update-div")
 
+function saveToDO(){
+    localStorage.setItem("todos",JSON.stringify(todos))
+}
 function updateCounts() {
     todoCount.textContent = `TASKS(${todos.length})`
     todoCompleteCount.textContent = `COMPLETED: ${completeCheck()}`
@@ -95,6 +98,7 @@ function startEditToDo(id) {
 function deleteToDofn(id) {
     todos = todos.filter((todo) => (todo.id !== Number(id)))
     // btn.textContent = "Add"
+    saveToDO()
 
 }
 
@@ -147,6 +151,7 @@ todoForm.addEventListener("submit", (e) => {
         todoInput.value = ""
         updateCounts()
     }
+    saveToDO()
 
 })
 
@@ -203,6 +208,8 @@ todoList.addEventListener("change", (e) => {
 
     // label.classList.toggle("text-white")
     updateCounts()
+    saveToDO()
+
 })
 cancelBtn.addEventListener("click", (e) => {
     resetFieldAll()
