@@ -24,22 +24,24 @@ async function searchMovie(IMDb) {
 
 function displayMovie(movie) {
     movieDetail.innerHTML = `
-        <div>
-        <img src="${movie.Poster}" alt="">
-        </div>
+        <div class="wrapper">
+            <div class="poster">
+                <img src="${movie.Poster}" alt="${movie.Title} poster">
+            </div>
 
-        <div>
-            <h2>${movie.Title}</h2>
-            <h5>Genre: ${movie.Genre}</h5>
-            <section>
-                <span>${movie.Year}</span>
-                <span>${movie.Rated}</span>
-                <span>${movie.Runtime}</span>
-                <span>IMDb Rating: ${movie.imdbRating} / 10</span>
-            </section>
+            <div class="movie-info">
+                <h2>${movie.Title}</h2>
+                <h5>${movie.Genre}</h5>
 
-            <div>
+                <ul>
+                    <li>${movie.Year}</li>
+                    <li>${movie.Rated}</li>
+                    <li>${movie.Runtime}</li>
+                    <li>IMDb ${movie.imdbRating}/10</li>
+                </ul>
+
                 <p>${movie.Plot}</p>
             </div>
         </div>`
+
 }

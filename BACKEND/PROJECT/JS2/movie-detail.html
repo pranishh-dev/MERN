@@ -1,60 +1,112 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="theme-color" content="#0c0d12">
+
+    <title>Cineva — Movie Details</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
-    <h2>Movie details</h2>
-    <!-- {
-  "Title": "The Avengers",
-  "Year": "1998",
-  "Rated": "PG-13",
-  "Released": "14 Aug 1998",
-  "Runtime": "89 min",
-  "Genre": "Action, Adventure, Sci-Fi",
-  "Director": "Jeremiah S. Chechik",
-  "Writer": "Sydney Newman, Don MacPherson",
-  "Actors": "Ralph Fiennes, Uma Thurman, Sean Connery",
-  "Plot": "British Ministry Agent John Steed, under direction from \"Mother\", investigates a diabolical plot by archvillain Sir August de Wynter to rule the world with his weather control machine. Steed investigates the beautiful Doctor Mrs. Emma Peel, the only suspect, but simultaneously falls for her and joins forces with her to combat Sir August.",
-  "Language": "English",
-  "Country": "United States",
-  "Awards": "4 wins & 17 nominations total",
-  "Poster": "https://m.media-amazon.com/images/M/MV5BZTA4ZmZlZWQtZDRlYS00ZWZhLTk0MzEtYjExMGIzMTBlZDNlXkEyXkFqcGc@._V1_QL75_UX380_CR0,5,380,562_.jpg",
-  "Ratings": [
-    {
-      "Source": "Internet Movie Database",
-      "Value": "3.8/10"
-    },
-    {
-      "Source": "Rotten Tomatoes",
-      "Value": "5%"
-    },
-    {
-      "Source": "Metacritic",
-      "Value": "12/100"
-    }
-  ],
-  "Metascore": "12",
-  "imdbRating": "3.8",
-  "imdbVotes": "46,066",
-  "imdbID": "tt0118661",
-  "Type": "movie",
-  "DVD": "N/A",
-  "BoxOffice": "$23,384,939",
-  "Production": "N/A",
-  "Website": "N/A",
-  "Response": "True"
-} -->
-    <div id="movie-detail">
-        
+<body class="min-h-screen overflow-x-hidden bg-[#0c0d12] text-[#f1f0f7]">
+
+    <!-- Background ambience -->
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+        <div class="absolute -left-40 -top-60 h-[500px] w-[500px] rounded-full bg-violet-500/10 blur-[140px]"></div>
+        <div class="absolute -right-60 top-[35%] h-[500px] w-[500px] rounded-full bg-blue-500/[0.07] blur-[150px]"></div>
+
+        <div class="absolute inset-0 opacity-[0.025]"
+            style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 5px 5px;">
+        </div>
     </div>
 
-    <script src="movie-detail.js"></script>
-</body>
+    <!-- Navbar -->
+    <header class="mx-auto flex h-[78px] w-[min(1200px,calc(100%-40px))] items-center justify-between border-b border-white/[0.07]">
 
+        <a href="index.html" class="flex items-center gap-3">
+            <span class="grid h-10 w-10 place-items-center rounded-xl border border-violet-300/15 bg-violet-300/[0.08] text-violet-200">
+                <i data-lucide="clapperboard" class="h-5 w-5"></i>
+            </span>
+
+            <span class="font-heading text-2xl font-semibold tracking-tight">
+                Cineva<span class="text-violet-300">.</span>
+            </span>
+        </a>
+
+        <a href="index.html"
+            class="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2.5 text-xs font-medium transition duration-300 hover:-translate-y-0.5 hover:border-violet-300/25 hover:bg-violet-300/[0.06]">
+
+            <i data-lucide="arrow-left" class="h-4 w-4 text-violet-300"></i>
+
+            Back to search
+        </a>
+    </header>
+
+    <main class="mx-auto w-[min(1100px,calc(100%-40px))] py-10 sm:py-14">
+
+        <!-- Back link -->
+        <a href="index.html"
+            class="mb-8 inline-flex items-center gap-2 text-xs text-[#a0a1b1] transition hover:text-violet-200">
+
+            <i data-lucide="arrow-left" class="h-4 w-4"></i>
+
+            Back to discovery
+        </a>
+
+        <!-- Movie detail container -->
+        <section class="detail-container relative overflow-hidden rounded-[25px] border border-white/[0.07] bg-gradient-to-br from-white/[0.035] to-white/[0.008] p-5 sm:p-8">
+
+            <div class="pointer-events-none absolute -left-20 -top-40 h-[350px] w-[350px] rounded-full bg-violet-500/[0.08] blur-[100px]"></div>
+
+            <!-- Your existing movie-detail.js renders here -->
+            <div id="movie-detail" class="relative z-10">
+
+                <div class="loader"></div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mx-auto flex min-h-[100px] w-[min(1200px,calc(100%-40px))] items-center justify-between gap-5 border-t border-white/[0.07]">
+
+        <a href="index.html" class="flex items-center gap-2.5 font-heading text-lg font-semibold">
+            <span class="grid h-8 w-8 place-items-center rounded-lg border border-violet-300/15 bg-violet-300/[0.08] text-violet-200">
+                <i data-lucide="clapperboard" class="h-4 w-4"></i>
+            </span>
+
+            Cineva<span class="text-violet-300">.</span>
+        </a>
+
+        <p class="hidden text-xs text-[#686a7b] sm:block">
+            Made for the love of cinema.
+        </p>
+
+        <span class="text-[11px] text-[#686a7b]">
+            © 2026 Cineva
+        </span>
+    </footer>
+
+    <script src="movie-detail.js"></script>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+</body>
 </html>
+
+
