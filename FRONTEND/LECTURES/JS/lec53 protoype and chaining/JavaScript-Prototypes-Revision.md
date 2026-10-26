@@ -1,5 +1,7 @@
 # JavaScript Revision: Prototypes, Inheritance, Classes, and Shadowing
 
+prototype is a built-in mechanism that allows objects to inherit features from one another.
+
 ## 1. Prototype-based inheritance
 
 JavaScript objects can inherit properties and methods from another object through a **prototype chain**.
