@@ -3,14 +3,66 @@ CATEGORIES_API = "https://dummyjson.com/products/Categories"
 
 const productsContainer = document.querySelector("#products-container")
 const categoryFilters = document.querySelector("#category-filters")
+let allProducts = []
+let allCategories = []
 
-async function fetchProducts(API) {
+function formatCategory(category) {
+    return category.replace("-", " ")
+}
+
+async function fetchCategories() {
+
+    const res = await fetch(CATEGORIES_API)
+    const data = await res.json()
+    allCategories = [{ name: "All", slug: "all", url: API }, ...data]
+    renderCategories()
+}
+
+// function findAllCategories() {
+
+//     allProducts.forEach(({ category }) => { //object destructuring
+//         if (!allCategories.includes(category)) {
+//             allCategories.push(category)
+//         }
+//     })
+//     // console.log(allCategories);
+// }
+
+async function renderCategories(currentCategory = "all") {
+    categoryFilters.innerHTML = ""
+    // console.log(allCategories);
+    allCategories.forEach(({ name, slug, url }) => { //destructuring :
+        //{name,slug,url}= c
+        //name = c.name
+        //slug = c.slug
+
+        const btn = document.createElement("button")
+        btn.type = "button"
+
+        if (currentCategory == slug) {
+            btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-teal-700 text-white transition"
+        }
+        else {
+            btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
+        }
+
+        btn.textContent = name
+        btn.dataset.category = slug
+        btn.dataset.url = url
+
+        categoryFilters.append(btn)
+    })
+}
+
+async function fetchProducts(url) {
     try {
-        const res = await fetch(API)
+        const res = await fetch(url)
         const data = await res.json()
         // console.log(data);
-        renderProducts(data.products)
-        // console.log(data.categories);
+        // console.log(...data.products);
+        allProducts = data.products
+
+        renderProducts(allProducts)
     }
     catch (error) {
         console.log(error);
@@ -78,8 +130,7 @@ async function fetchProducts(API) {
     "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
 } */
 
-
-function renderProducts(products) {
+async function renderProducts(products) {
     productsContainer.innerHTML = ""
     products.forEach(p => {
 
@@ -93,7 +144,7 @@ function renderProducts(products) {
               </div>
               <div class="flex-grow flex flex-col">
               <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
-              ${p.category}
+              ${formatCategory(p.category)}
               </span>
               <h2 class="font-semibold text-slate-900 text-sm mb-2 line-clamp-2" title="${p.title}">
               ${p.title}
@@ -113,45 +164,24 @@ function renderProducts(products) {
     })
 }
 
-async function fetchCategories() {
-    const res = await fetch(CATEGORIES_API)
-    const categories = await res.json()
+categoryFilters.addEventListener("click", (e) => {
+    e.stopPropagation()
 
-    renderCategories(categories)
-}
+    let button = e.target
+    if (!button.type) return
 
-function renderCategories(categories) {
-    const categoryList = ["All", ...categories]
-    categoryList.forEach(c => {
-        
-        const btn = document.createElement("button")
-        btn.type = "button"
-        btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
 
-        btn.textContent = (categoryList.indexOf(c) == 0) ? c : c.name;
+    let category = button.dataset.category
+    let url = button.dataset.url
 
-        categoryFilters.append(btn)
-    })
-}
+    renderCategories(category)
+    console.log(category);
 
-function updateCategory() {
-    categoryFilters.addEventListener("click", (e) => {
-        e.stopPropagation()
-        // if (e.target )
+    fetchProducts(url)
+})
 
-        /*<button type="button" class="px-4 py-1.5 rounded-md text-sm font-medium text-slate-700 border border-slate-300 hover:bg-slate-100 transition">Womens Dresses</button>*/
-
-        let button = e.target.closest("button")
-        if (!button) return
-        console.log(button);
-        console.log(button.textContent);
-        button.classList.remove("text-slate-700")
-        button.classList.remove("bg-white")
-        button.classList.remove("hover:bg-slate-100")
-        button.classList.add("text-white")
-        button.classList.add("bg-green-500")
-    })
-}
-updateCategory()
+//default
 fetchProducts(API)
 fetchCategories()
+
+// findAllCategories()
