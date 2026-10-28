@@ -3,19 +3,154 @@ CATEGORIES_API = "https://dummyjson.com/products/Categories"
 
 const productsContainer = document.querySelector("#products-container")
 const categoryFilters = document.querySelector("#category-filters")
+const inputContainer = document.querySelector(".relative")
 let allProducts = []
 let allCategories = []
+const body = document.querySelector("body")
+
+
+//---------------------------------------------
+
+//wishlist:
+let wishList = []
+const wishListContainerDiv = document.querySelector("#wishlist-container")
+let wishListProducts = getItem("wishlist") || []
+const WishListCount = document.querySelector("#wishlist-count")
+
+function updateWishListCount() {
+  wishListProducts = getItem("wishlist") || []
+  WishListCount.textContent = wishListProducts.length
+}
+updateWishListCount()
+
+function loadedWishListRender() {
+  wishListProducts.forEach(({ title, price, id, category }) => {
+    console.log(wishListProducts);
+    // console.log(thumbnail,title,price,id);
+    const card = document.createElement("div")
+    card.className = "p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between"
+
+    card.innerHTML =
+      `
+     <div class="flex items-center gap-4 w-full sm:w-auto flex-1 min-w-0">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-white border border-slate-200 rounded p-1.5 flex items-center justify-center shrink-0">
+              <img 
+                src="https://cdn.dummyjson.com/product-images/${category}/${formatTitle(title)}/thumbnail.webp" 
+                alt="${title}" 
+                class="max-h-full max-w-full object-contain"
+              >
+            </div>
+            <div class="min-w-0 flex-1">
+              <a 
+                href="product-details.html?id=${id}" 
+                class="text-sm font-semibold text-slate-900 hover:text-teal-700 line-clamp-2 transition" 
+                title="${title}"
+              >
+                ${title}
+              </a>
+              <p class="text-sm font-bold text-slate-900 mt-1">${convertNp(price)}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
+            <button 
+              type="button" 
+              class="wishlist-add-cart-btn inline-flex items-center justify-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white text-sm font-medium py-2 px-4 rounded transition shadow-sm"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              <span>Add to Cart</span>
+            </button>
+            <button 
+              type="button" 
+              class="wishlist-remove-btn inline-flex items-center justify-center gap-1.5 text-slate-500 hover:text-red-600 border border-slate-300 hover:border-red-300 text-sm font-medium py-2 px-3 rounded transition"
+              title="Remove from Wishlist"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+              <span>Remove from Wishlist</span>
+            </button>
+          </div>
+    `
+    wishListContainerDiv.append(card)
+
+  })
+}
+
+function renderWishList() {
+
+  //if empty wish list 
+  if (wishListProducts.length == 0) {
+    emptyWishListRender()
+  }
+  //if loaded wish list
+  else {
+    loadedWishListRender()
+  }
+
+  //update count
+  updateWishListCount()
+}
+
+function emptyWishListRender() {
+
+  let emptyWishListStateDiv = document.createElement("div")
+  emptyWishListStateDiv.className = "bg-white border border-slate-200 rounded-lg p-12 text-center max-w-md mx-auto my-8"
+
+  emptyWishListStateDiv.innerHTML =
+    `
+          <div class="w-16 h-16 mx-auto mb-4 text-slate-300 flex items-center justify-center">
+            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+            </svg>
+          </div>
+          <h2 class="text-xl font-semibold text-slate-800 mb-2">Your wishlist is empty</h2>
+          <p class="text-slate-500 text-sm mb-6">Looks like you haven't saved any products to your wishlist yet.</p>
+          <a href="index.html" class="inline-flex items-center justify-center bg-teal-700 hover:bg-teal-800 text-white font-medium px-6 py-2.5 rounded-md transition text-sm">
+            Start Shopping
+          </a>
+  `
+  wishListContainerDiv.innerHTML = ""
+  wishListContainerDiv.append(emptyWishListStateDiv)
+}
+
+if (wishListContainerDiv) {
+  renderWishList()
+}
+
+//---------------------------------------------
+
+function getItem(key) {
+  return JSON.parse(localStorage.getItem(key)) || []
+}
+function setItem(key, data) {
+  localStorage.setItem(key, JSON.stringify(data || []))
+}
+function removeItem(key) {
+  localStorage.removeItem(key)
+}
+
+function convertNp(price) {
+  let npr = "रु" + (price * 154).toFixed(2)
+  return npr
+}
+
+function formatTitle(title) {
+  let output = (title.replaceAll(" ", "-")).toLowerCase()
+  return output;
+}
 
 function formatCategory(category) {
-    return category.replace("-", " ")
+  return category.replace("-", " ")
 }
 
 async function fetchCategories() {
 
-    const res = await fetch(CATEGORIES_API)
-    const data = await res.json()
-    allCategories = [{ name: "All", slug: "all", url: API }, ...data]
-    renderCategories()
+  const res = await fetch(CATEGORIES_API)
+  const data = await res.json()
+  allCategories = [{ name: "All", slug: "all", url: API }, ...data]
+  renderCategories()
 }
 
 // function findAllCategories() {
@@ -28,160 +163,282 @@ async function fetchCategories() {
 //     // console.log(allCategories);
 // }
 
-async function renderCategories(currentCategory = "all") {
-    categoryFilters.innerHTML = ""
-    // console.log(allCategories);
-    allCategories.forEach(({ name, slug, url }) => { //destructuring :
-        //{name,slug,url}= c
-        //name = c.name
-        //slug = c.slug
+async function renderCategories(currentCategorySlug = "all") {
+  categoryFilters.innerHTML = ""
+  // console.log(allCategories);
+  allCategories.forEach(({ name, slug, url }) => { //destructuring :
+    //{name,slug,url}= c
+    //name = c.name
+    //slug = c.slug
 
-        const btn = document.createElement("button")
-        btn.type = "button"
+    const btn = document.createElement("button")
+    btn.type = "button"
 
-        if (currentCategory == slug) {
-            btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-teal-700 text-white transition"
-        }
-        else {
-            btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
-        }
+    if (currentCategorySlug == slug) {
+      btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-teal-700 text-white transition"
+    }
+    else {
+      btn.className = "px-4 py-1.5 rounded-md text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 transition"
+    }
 
-        btn.textContent = name
-        btn.dataset.category = slug
-        btn.dataset.url = url
+    btn.textContent = name
+    btn.dataset.category = slug
+    btn.dataset.url = url
 
-        categoryFilters.append(btn)
-    })
+    categoryFilters.append(btn)
+  })
 }
 
 async function fetchProducts(url) {
-    try {
-        const res = await fetch(url)
-        const data = await res.json()
-        // console.log(data);
-        // console.log(...data.products);
-        allProducts = data.products
+  try {
+    const res = await fetch(url)
+    const data = await res.json()
+    // console.log(data);
+    // console.log(...data.products);
+    allProducts = data.products
 
-        renderProducts(allProducts)
-    }
-    catch (error) {
-        console.log(error);
-    }
+    renderProducts(allProducts)
+  }
+  catch (error) {
+    console.log(error);
+  }
 }
-
-/*{
-    "id": 1,
-    "title": "Essence Mascara Lash Princess",
-    "description": "The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.",
-    "category": "beauty",
-    "price": 9.99,
-    "discountPercentage": 10.48,
-    "rating": 2.56,
-    "stock": 99,
-    "tags": [
-        "beauty",
-        "mascara"
-    ],
-    "brand": "Essence",
-    "sku": "BEA-ESS-ESS-001",
-    "weight": 4,
-    "dimensions": {
-        "width": 15.14,
-        "height": 13.08,
-        "depth": 22.99
-    },
-    "warrantyInformation": "1 week warranty",
-    "shippingInformation": "Ships in 3-5 business days",
-    "availabilityStatus": "In Stock",
-    "reviews": [
-        {
-            "rating": 3,
-            "comment": "Would not recommend!",
-            "date": "2025-04-30T09:41:02.053Z",
-            "reviewerName": "Eleanor Collins",
-            "reviewerEmail": "eleanor.collins@x.dummyjson.com"
-        },
-        {
-            "rating": 4,
-            "comment": "Very satisfied!",
-            "date": "2025-04-30T09:41:02.053Z",
-            "reviewerName": "Lucas Gordon",
-            "reviewerEmail": "lucas.gordon@x.dummyjson.com"
-        },
-        {
-            "rating": 5,
-            "comment": "Highly impressed!",
-            "date": "2025-04-30T09:41:02.053Z",
-            "reviewerName": "Eleanor Collins",
-            "reviewerEmail": "eleanor.collins@x.dummyjson.com"
-        }
-    ],
-    "returnPolicy": "No return policy",
-    "minimumOrderQuantity": 48,
-    "meta": {
-        "createdAt": "2025-10-09T14:47:01.588Z",
-        "updatedAt": "2026-05-23T11:27:41.868Z",
-        "barcode": "5784719087687",
-        "qrCode": "https://cdn.dummyjson.com/public/qr-code.png"
-    },
-    "images": [
-        "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp"
-    ],
-    "thumbnail": "https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/thumbnail.webp"
-} */
 
 async function renderProducts(products) {
-    productsContainer.innerHTML = ""
+  productsContainer.innerHTML = ""
+  if (products.length > 0) {
+
     products.forEach(p => {
 
-        const article = document.createElement("article")
-        article.className = "bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-sm transition"
-        article.innerHTML =
-            ` 
-        <div class="h-48 w-full flex items-center justify-center p-3 mb-4 bg-white">
-        <img src="${p.thumbnail}"
-              alt="${p.title}" class="max-h-full max-w-full object-contain" loading="lazy">
+      const article = document.createElement("article")
+
+      article.className = ` bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-sm transition`
+      article.innerHTML =
+        ` 
+            <div class="h-48 w-full flex items-center justify-center p-3 mb-4 bg-white">
+            <img src="${p.thumbnail}"
+                  alt="${p.title}" class="max-h-full max-w-full object-contain" loading="lazy">
+                  </div>
+                  <div class="flex-grow flex flex-col">
+                  <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
+                  ${formatCategory(p.category)}
+                  </span>
+                  <h2 class="font-semibold text-slate-900 text-sm mb-2 line-clamp-2" title="${p.title}">
+                  ${p.title}
+                </h2>
+                <div class="mt-auto pt-2">
+                <span class="text-lg font-bold text-slate-900">
+                 ${convertNp(p.price)}
+                  </span>
+                  </div>
+                  <a href="product-details.html?id=${p.id}"
+                  class="mt-4 block w-full text-center bg-teal-700 hover:bg-teal-800 text-white text-sm font-medium py-2 px-4 rounded transition">
+                  View Details
+                </a>
               </div>
-              <div class="flex-grow flex flex-col">
-              <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
-              ${formatCategory(p.category)}
-              </span>
-              <h2 class="font-semibold text-slate-900 text-sm mb-2 line-clamp-2" title="${p.title}">
-              ${p.title}
-            </h2>
-            <div class="mt-auto pt-2">
-            <span class="text-lg font-bold text-slate-900">
-             रु${(p.price * 152.54).toFixed(2)}
-              </span>
-              </div>
-              <a href="product-details.html"
-              class="mt-4 block w-full text-center bg-teal-700 hover:bg-teal-800 text-white text-sm font-medium py-2 px-4 rounded transition">
-              View Details
-            </a>
-          </div>
-    `
-        productsContainer.append(article)
+        `
+      productsContainer.append(article)
     })
+  } else {
+    productsContainer.textContent = "Product Not Found."
+  }
 }
 
-categoryFilters.addEventListener("click", (e) => {
+if (categoryFilters) {
+
+  categoryFilters.addEventListener("click", (e) => {
     e.stopPropagation()
 
     let button = e.target
     if (!button.type) return
 
 
-    let category = button.dataset.category
+    let categorySlug = button.dataset.category
     let url = button.dataset.url
 
-    renderCategories(category)
-    console.log(category);
+    renderCategories(categorySlug)
+    console.log(categorySlug);
 
     fetchProducts(url)
-})
+  })
+
+}
+
+if (inputContainer) {
+
+  inputContainer.addEventListener("input", (e) => {
+    let input = document.querySelector("input").value.trim()
+    if (input) {
+      let url = `https://dummyjson.com/products/search?q=${input}`
+      fetchProducts(url)
+    }
+  })
+
+}
+
+function init() {
+
+  fetchProducts(API)
+  fetchCategories()
+
+}
 
 //default
-fetchProducts(API)
-fetchCategories()
+if (productsContainer) {
+  init()
+}
 
-// findAllCategories()
+
+
+// //------------product0details -----
+const productDetailContainer = document.querySelector("#product-detail-container")
+if (productDetailContainer) {
+  const params = new URLSearchParams(window.location.search)
+  let id = params.get("id")?.trim();
+
+  async function getProduct(id) {
+    productDetailContainer.innerHTML = "Loading..."
+    const res = await fetch(`https://dummyjson.com/products/${id}`)
+    const product = await res.json()
+    console.log(product);
+    const { title, category, rating, reviews, price, description } = product
+    // console.log(product);
+    productDetailContainer.innerHTML =
+      `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+        
+                <div
+                  class="bg-white border border-slate-200 rounded-lg p-8 flex items-center justify-center min-h-[350px] md:min-h-[440px]">
+                  <img src="https://cdn.dummyjson.com/product-images/${category}/${formatTitle(title)}/thumbnail.webp"
+                    alt="${title}" class="max-h-96 max-w-full object-contain">
+                </div>
+        
+                <div class="flex flex-col">
+                  <div>
+                    <span class="inline-block text-xs font-semibold text-teal-700 uppercase tracking-wider mb-2">
+                      ${category}
+                    </span>
+                  </div>
+        
+                  <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
+                    ${title}
+                  </h1>
+        
+                  <div class="flex items-center gap-1 mb-4">
+                    <div class="flex items-center" aria-label="2.6 out of 5 stars">
+                      <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="w-5 h-5 text-slate-300 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <svg class="w-5 h-5 text-slate-300 fill-current" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                          d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </div>
+                    <span class="ml-2 text-sm text-slate-500 font-medium">
+                      ${rating} (${reviews.length} reviews)
+                    </span>
+                  </div>
+        
+                  <div class="mb-6">
+                    <span class="text-2xl sm:text-3xl font-bold text-slate-900">
+                      ${convertNp(price)}
+                    </span>
+                  </div>
+        
+                  <div class="border-t border-b border-slate-200 py-6 mb-6">
+                    <p class="text-slate-600 text-base leading-relaxed">
+                     ${description}
+                    </p>
+                  </div>
+        
+                  <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        
+                    <div class="flex items-center border border-slate-300 rounded-md bg-white w-fit">
+                      <button type="button" id="qty-minus"
+                        class="p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-l-md transition"
+                        aria-label="Decrease quantity">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                        </svg>
+                      </button>
+        
+                      <span id="qty-value" class="w-12 text-center text-sm font-semibold text-slate-900 select-none">
+                        1
+                      </span>
+        
+                      <button type="button" id="qty-plus"
+                        class="p-2.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-r-md transition"
+                        aria-label="Increase quantity">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                      </button>
+                    </div>
+        
+                    <button type="button" id="add-to-cart-btn"
+                      class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-teal-700 hover:bg-teal-800 text-white font-medium py-2.5 px-6 rounded-md shadow-sm transition">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                      </svg>
+                      <span>Add to Cart</span>
+                    </button>
+        
+                    <button type="button" id="add-to-wishlist-btn"
+                      class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 border border-teal-700 text-teal-700 hover:bg-teal-50 font-medium py-2.5 px-6 rounded-md shadow-sm transition">
+                      <svg id="wishlist-btn-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                        </path>
+                      </svg>
+                      <span id="wishlist-btn-text">Add to Wishlist</span>
+                    </button>
+                  </div>
+        
+                </div>
+              </div>  -->
+            
+        `
+
+    const addToWishlistBtn = document.querySelector("#add-to-wishlist-btn")
+    addToWishlistBtn.addEventListener("click", (e) => {
+
+      let wishListProducts = getItem("wishlist") || [{}]
+
+      //checking if product is already in wishlist
+      let present = false
+      wishListProducts.forEach(p => {
+        if (p.id == id) present = true
+      })
+
+      //adding the product only if it is absent in wishList
+      if (present == false) {
+        localStorage.setItem("wishlist", JSON.stringify([...wishListProducts, product]))
+        wishListProducts = getItem("wishlist")
+      }
+
+      console.log(wishListProducts);
+      updateWishListCount()
+    })
+  }
+
+  getProduct(id)
+
+}
