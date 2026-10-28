@@ -25,7 +25,7 @@ updateWishListCount()
 
 function loadedWishListRender() {
   wishListProducts.forEach(({ title, price, id, category }) => {
-    console.log(wishListProducts);
+    // console.log(wishListProducts);
     // console.log(thumbnail,title,price,id);
     const card = document.createElement("div")
     card.className = "p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between"
@@ -53,7 +53,8 @@ function loadedWishListRender() {
           </div>
           <div class="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
             <button 
-              type="button" 
+              type="button"
+              id="${id}"
               class="wishlist-add-cart-btn inline-flex items-center justify-center gap-1.5 bg-teal-700 hover:bg-teal-800 text-white text-sm font-medium py-2 px-4 rounded transition shadow-sm"
             >
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -63,6 +64,7 @@ function loadedWishListRender() {
             </button>
             <button 
               type="button" 
+              id="${id}"
               class="wishlist-remove-btn inline-flex items-center justify-center gap-1.5 text-slate-500 hover:text-red-600 border border-slate-300 hover:border-red-300 text-sm font-medium py-2 px-3 rounded transition"
               title="Remove from Wishlist"
             >
@@ -76,6 +78,7 @@ function loadedWishListRender() {
     wishListContainerDiv.append(card)
 
   })
+  
 }
 
 function renderWishList() {
@@ -118,6 +121,8 @@ function emptyWishListRender() {
 if (wishListContainerDiv) {
   renderWishList()
 }
+
+
 
 //---------------------------------------------
 
