@@ -8,8 +8,37 @@ let allProducts = []
 let allCategories = []
 const body = document.querySelector("body")
 
+//-----------------------------------------------------------------------------------------
 
-//---------------------------------------------
+function getItem(key) {
+  return JSON.parse(localStorage.getItem(key)) || []
+}
+
+function convertNp(price) {
+  let npr = "रु" + (price * 154).toFixed(2)
+  return npr
+}
+
+function formatTitle(title) {
+  let output = (title.replaceAll(" ", "-")).toLowerCase()
+  return output;
+}
+
+function formatCategory(category) {
+  return category.replace("-", " ")
+}
+
+async function fetchCategories() {
+
+  const res = await fetch(CATEGORIES_API)
+  const data = await res.json()
+  allCategories = [{ name: "All", slug: "all", url: API }, ...data]
+  renderCategories()
+}
+
+//-----------------------------------------------------------------------------------------
+
+
 let cartList = []
 const cartContainerDiv = document.querySelector("#cart-container")
 // console.log(cartContainerDiv);
@@ -23,10 +52,11 @@ function updateCartCount() {
 }
 updateCartCount()
 
+
 function loadedCartRender() {
   // cartContainerDiv.innerHTML = "HI"
 
-  
+
   let total = 0
 
   const card = document.createElement("div")
@@ -34,8 +64,8 @@ function loadedCartRender() {
 
   const cardProduct = document.createElement("div")
   cardProduct.className = "lg:col-span-2 bg-white border border-slate-200 rounded-lg divide-y divide-slate-200 overflow-hidden shadow-sm"
-  cartProducts.forEach(({ category,title, price, id, count }) => {
-    // console.log(title, price, id, count);
+  cartProducts.forEach(({ category, title, price, id, count }) => {
+    console.log(title, price, id, count);
     // console.log("hi");
     const product = document.createElement("div")
     product.className = "p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between"
@@ -53,7 +83,7 @@ function loadedCartRender() {
                   title="${title}">
                   ${title}
                 </a>
-                <p class="text-xs text-slate-500 mt-1">${convertNp(price * count)} each</p>
+                <p class="text-xs text-slate-500 mt-1">${convertNp(price)} each</p>
               </div>
             </div>
             <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto shrink-0">
@@ -79,7 +109,7 @@ function loadedCartRender() {
               <div class="w-20 text-right">
                 <span class="text-sm font-bold text-slate-900">${convertNp(price)}</span>
               </div>
-              <button type="button"
+              <button type="button" id=${id}
                 class="cart-wishlist-btn text-slate-400 hover:text-teal-700 p-1.5 rounded transition"
                 title="Add to Wishlist" aria-label="Add to Wishlist">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -101,9 +131,11 @@ function loadedCartRender() {
             </div>
     `
 
-    total+=parseFloat(count*price)
+    total += parseFloat(price)
+    // console.log(total);
     cardProduct.append(product)
   })
+
 
 
   const cardTotal = document.createElement("div")
@@ -131,23 +163,6 @@ function loadedCartRender() {
   cartContainerDiv.append(card)
 
 }
-
-
-function renderCart() {
-
-  //if empty cart
-  if (cartProducts.length == 0) {
-    emptyCartRender()
-  }
-  //if loaded cart
-  else {
-    loadedCartRender()
-  }
-
-  //update count
-  updateCartCount()
-}
-
 function emptyCartRender() {
 
   let emptyCartStateDiv = document.createElement("div")
@@ -170,10 +185,64 @@ function emptyCartRender() {
   cartContainerDiv.innerHTML = ""
   cartContainerDiv.append(emptyCartStateDiv)
 }
+function renderCart() {
+
+  //if empty cart
+  if (cartProducts.length == 0) {
+    emptyCartRender()
+  }
+  //if loaded cart
+  else {
+    loadedCartRender()
+  }
+
+  //update count
+  updateCartCount()
+}
 
 if (cartContainerDiv) {
   renderCart()
 }
+function addProductToWish(btn) {
+  const product = cartProducts.find((p) => p.id == btn.id)
+  if (!product) return
+  // console.log(product);
+  wishListProducts.push(product)
+  localStorage.setItem("wishlist", JSON.stringify(wishListProducts))
+}
+function removeProductFromCart(btn) {
+  cartProducts = cartProducts.filter((p) => p.id != btn.id)
+  localStorage.setItem("cartList", JSON.stringify(cartProducts))
+}
+
+if (cartContainerDiv) {
+
+  cartContainerDiv.addEventListener("click", (e) => {
+
+    removeBtn = e.target.closest(".cart-remove-btn")
+    cartToWishBtn = e.target.closest(".cart-wishlist-btn")
+
+    if (!removeBtn && !cartToWishBtn) return
+    if (cartToWishBtn) {
+      //addtowish
+      addProductToWish(cartToWishBtn)
+
+      //removefromcart
+      removeProductFromCart(cartToWishBtn)
+    }
+    if (removeBtn) {
+      removeProductFromCart(removeBtn)
+    }
+
+    cartContainerDiv.innerHTML = ""
+    renderCart()
+    updateWishListCount()
+  })
+
+}
+
+
+
 
 //wishlist:
 let wishList = []
@@ -245,22 +314,6 @@ function loadedWishListRender() {
   })
 
 }
-
-function renderWishList() {
-
-  //if empty wish list 
-  if (wishListProducts.length == 0) {
-    emptyWishListRender()
-  }
-  //if loaded wish list
-  else {
-    loadedWishListRender()
-  }
-
-  //update count
-  updateWishListCount()
-}
-
 function emptyWishListRender() {
 
   let emptyWishListStateDiv = document.createElement("div")
@@ -282,11 +335,37 @@ function emptyWishListRender() {
   wishListContainerDiv.innerHTML = ""
   wishListContainerDiv.append(emptyWishListStateDiv)
 }
+function renderWishList() {
+
+  //if empty wish list 
+  if (wishListProducts.length == 0) {
+    emptyWishListRender()
+  }
+  //if loaded wish list
+  else {
+    loadedWishListRender()
+  }
+
+  //update count
+  updateWishListCount()
+}
 
 if (wishListContainerDiv) {
   renderWishList()
 }
 
+function removeProductFromWishList(btn) {
+  wishListProducts = wishListProducts.filter((p) => p.id != btn.id)
+  localStorage.setItem("wishlist", JSON.stringify(wishListProducts))
+}
+
+function addProductToCart(btn) {
+  const product = wishListProducts.find((p) => p.id == btn.id)
+  if (!product) return
+  // console.log(product);
+  cartProducts.push({ ...product, count: 1 })
+  localStorage.setItem("cartList", JSON.stringify(cartProducts))
+}
 
 if (wishListContainerDiv) {
 
@@ -300,24 +379,16 @@ if (wishListContainerDiv) {
       removeProductFromWishList(removeBtn)
     }
 
-    function removeProductFromWishList(btn) {
-      wishListProducts = wishListProducts.filter((p) => p.id != btn.id)
-      localStorage.setItem("wishlist", JSON.stringify(wishListProducts))
-    }
-
     if (wishToCartBtn) {
-      // removeProductFromWishList(wishToCartBtn)
-      // const cartProduct = fet
-      console.log(wishToCartBtn.id);
-
+      addProductToCart(wishToCartBtn)
+      removeProductFromWishList(wishToCartBtn)
     }
+
     renderWishList()
+    updateCartCount()
   })
 
 }
-
-
-
 
 // const wishToCartBtns = document.querySelectorAll(".wishlist-add-cart-btn")
 // console.log(wishToCartBtns);
@@ -331,46 +402,6 @@ if (wishListContainerDiv) {
 //     renderWishList()
 //   })
 // })
-
-
-
-//---------------------------------------------
-
-function getItem(key) {
-  return JSON.parse(localStorage.getItem(key)) || []
-}
-
-function convertNp(price) {
-  let npr = "रु" + (price * 154).toFixed(2)
-  return npr
-}
-
-function formatTitle(title) {
-  let output = (title.replaceAll(" ", "-")).toLowerCase()
-  return output;
-}
-
-function formatCategory(category) {
-  return category.replace("-", " ")
-}
-
-async function fetchCategories() {
-
-  const res = await fetch(CATEGORIES_API)
-  const data = await res.json()
-  allCategories = [{ name: "All", slug: "all", url: API }, ...data]
-  renderCategories()
-}
-
-// function findAllCategories() {
-
-//     allProducts.forEach(({ category }) => { //object destructuring
-//         if (!allCategories.includes(category)) {
-//             allCategories.push(category)
-//         }
-//     })
-//     // console.log(allCategories);
-// }
 
 async function renderCategories(currentCategorySlug = "all") {
   categoryFilters.innerHTML = ""
@@ -397,7 +428,6 @@ async function renderCategories(currentCategorySlug = "all") {
     categoryFilters.append(btn)
   })
 }
-
 async function fetchProducts(url) {
   try {
     const res = await fetch(url)
@@ -412,7 +442,6 @@ async function fetchProducts(url) {
     console.log(error);
   }
 }
-
 async function renderProducts(products) {
   productsContainer.innerHTML = ""
   if (products.length > 0) {
@@ -454,7 +483,6 @@ async function renderProducts(products) {
 }
 
 if (categoryFilters) {
-
   categoryFilters.addEventListener("click", (e) => {
     e.stopPropagation()
 
@@ -466,15 +494,13 @@ if (categoryFilters) {
     let url = button.dataset.url
 
     renderCategories(categorySlug)
-    console.log(categorySlug);
+    // console.log(categorySlug);
 
     fetchProducts(url)
   })
-
 }
 
 if (inputContainer) {
-
   inputContainer.addEventListener("input", (e) => {
     let input = document.querySelector("input").value.trim()
     if (input) {
@@ -482,14 +508,11 @@ if (inputContainer) {
       fetchProducts(url)
     }
   })
-
 }
 
 function init() {
-
   fetchProducts(API)
   fetchCategories()
-
 }
 
 //default
@@ -505,11 +528,11 @@ if (productDetailContainer) {
   const params = new URLSearchParams(window.location.search)
   let id = params.get("id")?.trim();
 
-  async function getProduct(id) {
+  async function rednerProductDetail(id) {
     productDetailContainer.innerHTML = "Loading..."
     const res = await fetch(`https://dummyjson.com/products/${id}`)
     const product = await res.json()
-    console.log(product);
+    // console.log(product);
     const { title, category, rating, reviews, price, description } = product
     // console.log(product);
     productDetailContainer.innerHTML =
@@ -626,28 +649,70 @@ if (productDetailContainer) {
             
         `
 
-    const addToWishlistBtn = document.querySelector("#add-to-wishlist-btn")
-    addToWishlistBtn.addEventListener("click", (e) => {
 
-      let wishListProducts = getItem("wishlist") || [{}]
+    productDetailContainer.addEventListener("click", (e) => {
+      let addToCartBtn = e.target.closest("#add-to-cart-btn")
+      let addToWishlistBtn = e.target.closest("#add-to-wishlist-btn")
 
-      //checking if product is already in wishlist
-      let present = false
-      wishListProducts.forEach(p => {
-        if (p.id == id) present = true
-      })
+      if (!addToCartBtn && !addToWishlistBtn) return
 
-      //adding the product only if it is absent in wishList
-      if (present == false) {
-        localStorage.setItem("wishlist", JSON.stringify([...wishListProducts, product]))
-        wishListProducts = getItem("wishlist")
+      //cart
+      if (addProductToCart) {
+        cartProducts = getItem("cartList")
+
+        let present = false
+        cartProducts.forEach(p => {
+          if (p.id == id) present = true
+        })
+
+        //adding the product only if it is absent in cart
+        if (present == false) {
+          localStorage.setItem("cartList", JSON.stringify([...cartProducts, { ...product, count: 1 }]))
+          cartProducts = getItem("cartList")
+        }
+
+        //if present in wishlist removing it from wishlist
+        wishListProducts.forEach((p) => {
+          if (p.id == id) {
+            wishListProducts = wishListProducts.filter((p) => p.id != id)
+            localStorage.setItem("wishlist", JSON.stringify(wishListProducts))
+          };
+        })
+
       }
 
-      console.log(wishListProducts);
+      //wishlist
+      if (addToWishlistBtn) {
+        let wishListProducts = getItem("wishlist")
+
+        //checking if product is already in wishlist
+        let present = false
+        wishListProducts.forEach(p => {
+          if (p.id == id) present = true
+        })
+
+        //adding the product only if it is absent in wishList
+        if (present == false) {
+          localStorage.setItem("wishlist", JSON.stringify([...wishListProducts, product]))
+          wishListProducts = getItem("wishlist")
+        }
+
+        //if present in cart removing it from cart
+        cartProducts.forEach((p) => {
+          if (p.id == id) {
+            console.log(cartProducts);
+            cartProducts = cartProducts.filter((p) => p.id != id)
+            localStorage.setItem("cartList", JSON.stringify(cartProducts))
+          };
+        })
+
+      }
+
+      updateCartCount()
       updateWishListCount()
     })
   }
 
-  getProduct(id)
-
+  rednerProductDetail(id)
 }
+
