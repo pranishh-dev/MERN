@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 export const StockFilter = ({ inStockFilter, setInStockFilter }) => {
   return (
     <form>
@@ -9,14 +7,12 @@ export const StockFilter = ({ inStockFilter, setInStockFilter }) => {
         id="stock"
         onClick={(e) => {
           e.currentTarget.checked
-            ? setInStockFilter((prev) => true)
-            : setInStockFilter((prev) => false);
+            ? setInStockFilter(true)
+            : setInStockFilter(false);
         }}
+        checked={inStockFilter}
       />
       <label htmlFor="stock">Filter Stock Products</label>
-
-      {/* pass inStockfilter */}
-      {console.log(inStockFilter)}
     </form>
   );
 };

@@ -1,6 +1,4 @@
-import React from "react";
 import { ProductRow } from "./productRow";
-import "./../components.css";
 
 export const ProductCategory = ({ categories, products }) => {
   return (
@@ -19,10 +17,7 @@ export const ProductCategory = ({ categories, products }) => {
               </thead>
 
               <tbody>
-                <ProductRow
-                  category={category}
-                  products={products}
-                />
+                <ProductRow category={category} products={products} />
               </tbody>
             </table>
           </div>

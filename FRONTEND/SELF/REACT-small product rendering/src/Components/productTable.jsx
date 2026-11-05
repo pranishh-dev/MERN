@@ -3,7 +3,11 @@ import { ProductCategory } from "./productCategory";
 export const ProductTable = ({ products, categories }) => {
   return (
     <div>
-      <ProductCategory categories={categories} products={products} />
+      {products.length === 0 ? (
+        <p>No products found matching your filters.</p>
+      ) : (
+        <ProductCategory categories={categories} products={products} />
+      )}
     </div>
   );
 };

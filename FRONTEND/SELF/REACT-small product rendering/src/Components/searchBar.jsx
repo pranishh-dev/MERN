@@ -1,6 +1,4 @@
-import React from "react";
-
-export const SearchBar = ({ setSearchTerm, searchTerm }) => {
+export const SearchBar = ({ setSearchTerm }) => {
   return (
     <form>
       <input
@@ -9,7 +7,8 @@ export const SearchBar = ({ setSearchTerm, searchTerm }) => {
         id=""
         placeholder="Enter product name "
         onChange={(e) => {
-          console.log(e.currentTarget.value);
+          let input = e.currentTarget.value.trim();
+          input ? setSearchTerm(input) : "";
         }}
       />
     </form>
