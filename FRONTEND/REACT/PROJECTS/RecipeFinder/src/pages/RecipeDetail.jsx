@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 
 export const RecipeDetail = () => {
@@ -12,11 +12,11 @@ export const RecipeDetail = () => {
   async function fetchRecipe() {
     try {
       let { data } = await axios.get(`https://dummyjson.com/recipes/${id}`);
-      //   console.log(data.recipes);
-      console.log(data);
+      //console.log(data.recipes);
+      // console.log(data);
       setRecipe(data);
     } catch (error) {
-      setError("Recipe Not Found")
+      setError("Recipe Not Found");
     }
     setLoading(false);
   }
@@ -43,7 +43,11 @@ export const RecipeDetail = () => {
   } = recipe;
 
   if (loading) {
-    return <p>Loading......</p>;
+    return (
+      <main className="max-w-6xl mx-auto px-4 py-8">
+        <p>Loading......</p>;
+      </main>
+    );
   }
   if (error) {
     return <p>{error}</p>;
