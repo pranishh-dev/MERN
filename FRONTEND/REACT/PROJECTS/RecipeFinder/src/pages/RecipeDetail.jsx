@@ -45,7 +45,7 @@ export const RecipeDetail = () => {
   if (loading) {
     return (
       <main className="max-w-6xl mx-auto px-4 py-8">
-        <p>Loading......</p>;
+        <p>Loading......</p>
       </main>
     );
   }
