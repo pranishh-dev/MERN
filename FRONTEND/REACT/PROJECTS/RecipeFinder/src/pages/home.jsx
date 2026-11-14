@@ -1,18 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { RecipeCard } from "../components/RecipeCard";
+import { useLoading } from "../../hooks/useLoading";
+import { useLoadingMore } from "../../hooks/useLoadingMore";
 
 function Home() {
   const [recipes, setRecipes] = useState([]);
   const [dataTotal, setDataTotal] = useState(recipes.length);
   const [query, setQuery] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
+  const { loading, makeLoading, makeNoLoading } = useLoading();
+  const { loadingMore, makeLoadingMore, makeNoLoadingMore } = useLoadingMore();
+  
+  // const [loadingMore, setLoadingMore] = useState(false);
   const [errorMsg, setErrorMsg] = useState(null);
   const searchInputRef = useRef(null);
 
   async function fetchRecipes(skipCount = 0, searchQuery = query) {
-    skipCount === 0 ? setLoading(true) : setLoadingMore(true);
+    skipCount === 0 ? makeLoading() : makeLoadingMore();
     setErrorMsg(null);
 
     try {
@@ -30,7 +34,7 @@ function Home() {
     } catch (error) {
       setErrorMsg(error);
     } finally {
-      skipCount === 0 ? setLoading(false) : setLoadingMore(false);
+      skipCount === 0 ? makeNoLoading() : makeNoLoadingMore();
     }
   }
 
